@@ -1,0 +1,20 @@
+{
+  "name": "docsify-templating",
+  "version": "0.1.1",
+  "description": "A thin Docsify plugin to support templating languages on Docsify markdown",
+  "main": "dist/docsify-templating.min.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [
+    "docsify"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
