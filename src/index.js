@@ -1,42 +1,39 @@
 const templating = function (hook, vm) {
-    hook.init(function (content, next) {
+    hook.init(function () {
         vm.templating = window.$docsify.templating || {};
-        vm.templating.render = vm.templating.render || noop_render;
+        vm.templating.render = vm.templating.render || noopRender;
+        vm.templating.parsedData = parse(vm.templating.data);
+    });
 
-        parse(vm.templating.data).then(
-            (parsed_data) => {
-                vm.templating.parsed_data = parsed_data;
-                next();
+    hook.beforeEach(function (content, next) {
+        vm.templating.parsedData.then(
+            (parsedData) => {
+                let data = {};
+                Object.assign(data, parsedData);
+                if (vm.frontmatter) {
+                    data.frontmatter = vm.frontmatter;
+                }
+
+                next(vm.templating.render(content, data));
             },
             (error) => { console.log(error); }
         );
     });
 
-    hook.beforeEach(function (content, next) {
-        let data = {};
-
-        Object.assign(data, vm.templating.parsed_data);
-        if (vm.frontmatter) {
-            data.frontmatter = vm.frontmatter;
-        }
-
-        next(vm.templating.render(content, data));
-    });
-
-    function noop_render(template, data) {
+    function noopRender(template, data) {
         return template;
     }
 
     async function parse(data) {
         let entries = Object.entries(data || {})
             .map(async ([key, value]) =>
-              [key, await parse_value(value)]
+              [key, await parseValue(value)]
             );
         entries = await Promise.all(entries);
         return Object.fromEntries(entries);
     }
 
-    async function parse_value(value) {
+    async function parseValue(value) {
       if (typeof value == 'function') {
           return await value();
       } else {
