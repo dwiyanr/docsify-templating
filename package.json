@@ -1,6 +1,6 @@
 {
   "name": "docsify-templating",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A thin Docsify plugin to support templating languages on Docsify markdown",
   "homepage": "https://github.com/dwiyanr/docsify-templating",
   "repository": {
